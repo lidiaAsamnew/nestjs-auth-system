@@ -1,18 +1,18 @@
 # NestJS Auth System (Week 5)
 
-This project demonstrates a simple JWT-based authentication flow in NestJS:
+A learning-focused NestJS authentication system featuring **DTO validation**, **JWT authentication**, and **route protection with guards**, organized with a clean modular structure (`auth` / `user`).
 
-- DTO validation using `class-validator`
-- Global `ValidationPipe` in `main.ts`
-- JWT issuing via `JwtService`
-- JWT verification via `JwtStrategy`
-- Route protection via `JwtAuthGuard`
+## Features
 
-## Prerequisites
+- **DTO-based validation system** (via `class-validator`)
+- **Global `ValidationPipe`** (whitelist, forbidNonWhitelisted, transform)
+- **JWT authentication system**
+  - Login endpoint with token generation
+  - `JwtStrategy` implementation
+  - `JwtAuthGuard` route protection
+- **Clean modular structure** (Auth / Users separation)
 
-- Node.js + npm
-
-## Install & run
+## Setup & Installation
 
 ```bash
 npm install
@@ -20,6 +20,43 @@ npm run start:dev
 ```
 
 By default the app runs on `http://localhost:3000`.
+
+## 📁 Project Structure
+
+```text
+nestjs-auth-system/
+├── src/
+│   ├── auth/
+│   │   ├── dto/
+│   │   │   ├── login.dto.ts
+│   │   ├── guards/
+│   │   │   ├── jwt-auth.guard.ts
+│   │   ├── strategies/
+│   │   │   ├── jwt.strategy.ts
+│   │   ├── auth.controller.ts
+│   │   ├── auth.controller.spec.ts
+│   │   ├── auth.service.ts
+│   │   ├── auth.service.spec.ts
+│   │   ├── auth.module.ts
+│   ├── user/
+│   │   ├── users.service.ts
+│   │   ├── users.service.spec.ts
+│   │   ├── users.module.ts
+│   ├── app.controller.ts
+│   ├── app.controller.spec.ts
+│   ├── app.service.ts
+│   ├── app.module.ts
+│   ├── main.ts
+├── test/
+│   ├── app.e2e-spec.ts
+├── .env
+├── .gitignore
+├── .prettierrc
+├── eslint.config.mjs
+├── package.json
+├── tsconfig.json
+└── README.md
+```
 
 ## Seeded test users
 
@@ -77,7 +114,26 @@ Requires a Bearer token. Returns the decoded `req.user` from `JwtStrategy.valida
    - Authorization tab → **Bearer Token** → paste the token
    - Send → should return `{ userId, email }`
 
+## Do I need a `.env` file?
+
+**For learning:** not strictly required (your code works without it right now).
+
+**For production-style projects:** yes, you should store secrets and config in environment variables.
+
+Suggested variables (if you choose to wire them in):
+
+```bash
+# Port the API runs on
+PORT=3000
+
+# JWT signing secret (do not commit a real secret)
+JWT_SECRET=replace_me
+
+# Token expiration (example: 1h, 15m, 7d)
+JWT_EXPIRES_IN=1h
+```
+
 ## Notes
 
-- The JWT secret is currently hardcoded as `'secret'` in `src/auth/auth.module.ts` and `src/auth/strategies/jwt.strategy.ts` (fine for learning; for real apps use environment variables/config).
+- JWT is currently configured with a hardcoded secret in `src/auth/auth.module.ts` and `src/auth/strategies/jwt.strategy.ts`. For real apps, move this to `JWT_SECRET` and don’t commit secrets.
 
